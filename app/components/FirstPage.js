@@ -3,16 +3,18 @@
 import React from 'react';
 
 import {
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  Navigator
+	StyleSheet,
+	View,
+	Text,
+	Image,
+	TouchableOpacity,
+	Navigator
 } from 'react-native';
+
 import TabNavigator from '../../node_modules/react-native-tab-navigator-master/TabNavigator';
 import TabNavigatorItem from '../../node_modules/react-native-tab-navigator-master/TabNavigatorItem';
 import SecondPage from './SecondPage';
+
 const TAB_NORMAL_1=require('../imgs/tabbar_1.png');
 const TAB_NORMAL_2=require('../imgs/tabbar_2.png');
 const TAB_NORMAL_3=require('../imgs/tabbar_3.png');
@@ -22,6 +24,7 @@ const TAB_PRESS_1=require('../imgs/tabbar_1_press.png');
 const TAB_PRESS_2=require('../imgs/tabbar_2_press.png');
 const TAB_PRESS_3=require('../imgs/tabbar_3_press.png');
 const TAB_PRESS_4=require('../imgs/tabbar_4_press.png');
+
 class FirstPage extends React.Component {
 	constructor(props) {
 		super(props);
@@ -37,34 +40,36 @@ class FirstPage extends React.Component {
 				}
 			);
 		}
-   }
-      /**
+	}
+    /**
     渲染每项
     **/
     renderTabView(title,tabName,tabContent,isBadge){
-      var tabNomal;
-      var tabPress;
-      switch (tabName) {
-        case 'Home':
-          tabNomal=TAB_NORMAL_1;
-          tabPress=TAB_PRESS_1;
-          break;
-      case 'Video':
-        tabNomal=TAB_NORMAL_2;
-        tabPress=TAB_PRESS_2;
-        break;
-      case 'Follow':
-        tabNomal=TAB_NORMAL_3;
-        tabPress=TAB_PRESS_3;
-        break;
-      case 'Mine':
-        tabNomal=TAB_NORMAL_4;
-        tabPress=TAB_PRESS_4;
-        break;
-        default:
-
-      }
-      return(
+		var tabNomal;
+		var tabPress;
+		var viewtoshow;
+		switch (tabName) {
+			case 'Home':
+			tabNomal=TAB_NORMAL_1;
+			tabPress=TAB_PRESS_1;
+			viewtoshow = this.pageOne();
+			break;
+			case 'Video':
+			tabNomal=TAB_NORMAL_2;
+			tabPress=TAB_PRESS_2;
+			viewtoshow = this.getSecondPage();
+			break;
+			case 'Follow':
+			tabNomal=TAB_NORMAL_3;
+			tabPress=TAB_PRESS_3;
+			break;
+			case 'Mine':
+			tabNomal=TAB_NORMAL_4;
+			tabPress=TAB_PRESS_4;
+			break;
+			default:
+		}
+		return(
         <TabNavigatorItem
 			title={title}
 			renderIcon={()=><Image style={styles.tabIcon} source={tabNomal}/>}
@@ -76,13 +81,18 @@ class FirstPage extends React.Component {
 				<View style={styles.badgeView}>
 				<Text style={styles.badgeText}>15</Text>
 				</View>:null}
-			>
+		>
 	        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-		        <Text>{tabContent}</Text>
+	        	{viewtoshow}
 	        </View>
         </TabNavigatorItem>
       );
     }
+    /**
+     * 这里原来是用来跳转到SecondPage的。
+     * 改用第三方组件之后，就不再需要这个了。
+     * @return {[type]} [description]
+     */
 	_pressButton() {
 		const { navigator } = this.props;
 		    //为什么这里可以取得 props.navigator?请看上文:
@@ -95,18 +105,31 @@ class FirstPage extends React.Component {
 	        })
 	    }
 	}
+	getSecondPage(){
+		return(
+			<SecondPage></SecondPage>
+			);
+	}
 	tabBarView(){
-     return (
-       <TabNavigator
-        tabBarStyle={styles.tab}
-       >
-       {this.renderTabView('头条','Home','头条板块',true)}
-       {this.renderTabView('视频','Video','视频板块',false)}
-       {this.renderTabView('关注','Follow','关注板块',false)}
-       {this.renderTabView('我的','Mine','我的板块',false)}
-       </TabNavigator>
-     );
-   }
+    	return (
+			<TabNavigator
+				tabBarStyle={styles.tab}
+				>
+				{this.renderTabView('头条','Home','头条板块',true)}
+				{this.renderTabView('视频','Video','视频板块',false)}
+				{this.renderTabView('关注','Follow','关注板块',false)}
+				{this.renderTabView('我的','Mine','我的板块',false)}
+			</TabNavigator>
+		);
+	}
+
+	pageOne() {
+		return (
+		<View>
+			<Text>pageOne!</Text>
+		</View>
+		);
+	}
 	render() {
 		const tabBarView=this.tabBarView();
 		return (
