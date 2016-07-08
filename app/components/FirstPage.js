@@ -10,10 +10,18 @@ import {
   TouchableOpacity,
   Navigator
 } from 'react-native';
-import TabNavigator from 'react-native-tab-navigator';
-const TabNavigatorItem = TabNavigator.Item;
+import TabNavigator from '../../node_modules/react-native-tab-navigator-master/TabNavigator';
+import TabNavigatorItem from '../../node_modules/react-native-tab-navigator-master/TabNavigatorItem';
 import SecondPage from './SecondPage';
+const TAB_NORMAL_1=require('../imgs/tabbar_1.png');
+const TAB_NORMAL_2=require('../imgs/tabbar_2.png');
+const TAB_NORMAL_3=require('../imgs/tabbar_3.png');
+const TAB_NORMAL_4=require('../imgs/tabbar_4.png');
 
+const TAB_PRESS_1=require('../imgs/tabbar_1_press.png');
+const TAB_PRESS_2=require('../imgs/tabbar_2_press.png');
+const TAB_PRESS_3=require('../imgs/tabbar_3_press.png');
+const TAB_PRESS_4=require('../imgs/tabbar_4_press.png');
 class FirstPage extends React.Component {
 	constructor(props) {
 		super(props);
@@ -58,15 +66,20 @@ class FirstPage extends React.Component {
       }
       return(
         <TabNavigatorItem
-         title={title}
-         renderIcon={()=><Image style={styles.tabIcon} source={tabNomal}/>}
-         renderSelectedIcon={()=><Image style={styles.tabIcon} source={tabPress}/>}
-         selected={this.state.selectedTab===tabName}
-         selectedTitleStyle={{color:'#f85959'}}
-         onPress={()=>this.onPress(tabName)}
-         renderBadge={()=>isBadge?<View style={styles.badgeView}><Text style={styles.badgeText}>15</Text></View>:null}
-        >
-        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}><Text>{tabContent}</Text></View>
+			title={title}
+			renderIcon={()=><Image style={styles.tabIcon} source={tabNomal}/>}
+			renderSelectedIcon={()=><Image style={styles.tabIcon} source={tabPress}/>}
+			selected={this.state.selectedTab===tabName}
+			selectedTitleStyle={{color:'#f85959'}}
+			onPress={()=>this.onPress(tabName)}
+			renderBadge={()=>isBadge?
+				<View style={styles.badgeView}>
+				<Text style={styles.badgeText}>15</Text>
+				</View>:null}
+			>
+	        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+		        <Text>{tabContent}</Text>
+	        </View>
         </TabNavigatorItem>
       );
     }
