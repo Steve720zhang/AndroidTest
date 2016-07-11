@@ -10,8 +10,8 @@ import {
 
 class ThirdPage extends Component {
 	constructor(props) {
-	  super(props);
-	  this.state = {};
+		super(props);
+		this.state = {};
 	}
 	_back() {
 		let { navigator } = this.props;

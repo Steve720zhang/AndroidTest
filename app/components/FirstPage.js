@@ -13,7 +13,9 @@ import {
 
 import TabNavigator from '../../node_modules/react-native-tab-navigator-master/TabNavigator';
 import TabNavigatorItem from '../../node_modules/react-native-tab-navigator-master/TabNavigatorItem';
-import SecondPage from './SecondPage';
+import Fragment2 from './SecondPage';
+import Fragment3 from './ThirdPage';
+import Fragment4 from './FourthPage';
 
 const TAB_NORMAL_1=require('../imgs/tabbar_1.png');
 const TAB_NORMAL_2=require('../imgs/tabbar_2.png');
@@ -42,7 +44,7 @@ class FirstPage extends React.Component {
 		}
 	}
     /**
-    渲染每项
+    * 在此进行底部bar的渲染。
     **/
     renderTabView(title,tabName,tabContent,isBadge){
 		var tabNomal;
@@ -62,10 +64,12 @@ class FirstPage extends React.Component {
 			case 'Follow':
 			tabNomal=TAB_NORMAL_3;
 			tabPress=TAB_PRESS_3;
+			viewtoshow = this.getThirdPage();
 			break;
 			case 'Mine':
 			tabNomal=TAB_NORMAL_4;
 			tabPress=TAB_PRESS_4;
+			viewtoshow = this.getFourthPage();
 			break;
 			default:
 		}
@@ -105,11 +109,6 @@ class FirstPage extends React.Component {
 	        })
 	    }
 	}
-	getSecondPage(){
-		return(
-			<SecondPage></SecondPage>
-			);
-	}
 	tabBarView(){
     	return (
 			<TabNavigator
@@ -122,7 +121,6 @@ class FirstPage extends React.Component {
 			</TabNavigator>
 		);
 	}
-
 	pageOne() {
 		return (
 		<View>
@@ -130,8 +128,23 @@ class FirstPage extends React.Component {
 		</View>
 		);
 	}
+	getSecondPage(){
+		return(
+			<Fragment2></Fragment2>
+			);
+	}
+	getThirdPage(){
+		return(
+			<Fragment3></Fragment3>
+			);
+	}
+	getFourthPage(){
+		return(
+			<Fragment4></Fragment4>
+			);
+	}
 	render() {
-		const tabBarView=this.tabBarView();
+		const tabBarView = this.tabBarView();
 		return (
 			// <View >
 			// 	<Text>FirstPage</Text>
@@ -146,7 +159,7 @@ class FirstPage extends React.Component {
 		);
 	}
 }
- const styles = StyleSheet.create({
+const styles = StyleSheet.create({
 	container: {
 	 flex: 1,
 	 backgroundColor: '#F5FCFF',
@@ -189,10 +202,10 @@ class FirstPage extends React.Component {
 	styleOne: {
   	width:100,
   	height:60,
-  },
-  styleTwo: {
-    
-  }
+	},
+	styleTwo: {
+
+	}
 });
 
 
