@@ -47,11 +47,6 @@ class FourthPage extends Component{
       });
     },1000);
   }
-	getInitialState() {
-	    return {
-			isRefreshing: false,  
-	    };
-	}
 	render() {
 	    return (
 			<ListView
@@ -63,16 +58,6 @@ class FourthPage extends Component{
 							source={{uri: 'http://7xrgnr.com1.z0.glb.clouddn.com/icon5.jpg'}}/>
 					</View>
 				}>
-				refreshControl={
-				<RefreshControl
-					refreshing={this.state.isRefreshing}
-					onRefresh={this._onRefresh}
-					tintColor="#ff0000"
-					title="Loading..."
-					titleColor="#00ff00"
-					colors={['#ff0000', '#00ff00', '#0000ff']}
-					progressBackgroundColor="#ffff00"
-				/>}
 			</ListView>
 	    );
 	}
@@ -86,7 +71,7 @@ class FourthPage extends Component{
 
 const style = StyleSheet.create({
 	main: {
-	    flex: 1,
+    flex: 1,
 	},
 	cell: {
 		flexDirection: 'row', 

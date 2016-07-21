@@ -5,8 +5,12 @@ import {
 	Navigator,
 	View,
 	Text,
+	StyleSheet,
 	TouchableOpacity
 } from 'react-native';
+const Dimensions = require('Dimensions');
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class ThirdPage extends Component {
 	constructor(props) {
@@ -21,16 +25,17 @@ class ThirdPage extends Component {
 	}
 	render() {
 		return (
-			<View>
-			<Text>
-				ThirdPage!
-			</Text>
-			<TouchableOpacity onPress={this._back.bind(this)}>
-			<Text>_backSecond!</Text>
-			</TouchableOpacity>
+			<View style={ style.whole }>
+			
 			</View>
 		);
 	}
 }
+
+const style = StyleSheet.create({
+	whole: {
+		width: SCREEN_WIDTH,
+	}
+});
 
 export default ThirdPage;
