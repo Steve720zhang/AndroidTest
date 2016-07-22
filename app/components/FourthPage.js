@@ -39,10 +39,6 @@ class FourthPage extends Component{
         	'row 2','row 1', 'row 2','row 1', 'row 2',
         	'row 1', 'row 2','row 1', 'row 2','row 1', 
         	'row 2','row 1', 'row 2','row 1', 'row 2',
-        	'row 2','row 1', 'row 2','row 1', 'row 2',
-        	'row 1', 'row 2','row 1', 'row 2','row 1', 
-        	'row 2','row 1', 'row 2','row 1', 'row 2',
-        	'row 2','row 1', 'row 2','row 1', 'row 2',
         	'row 1', 'row 2','row 3'])
       });
     },1000);

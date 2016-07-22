@@ -7,7 +7,7 @@ import {
 	Navigator,
 	TouchableOpacity
 } from 'react-native';
-import ThirdPage from './ThirdPage';
+import AnoPage from './AnoPage';
 
 class SecondPage extends Component {
 	constructor(props) {
@@ -15,7 +15,7 @@ class SecondPage extends Component {
 	  this.state = {};
 	}
 	_jumpB() {
-		const { navigator } = this.props;
+		const { navigator } = this.props; 
 		    //为什么这里可以取得 props.navigator?请看上文:
 		    //<Component {...route.params} navigator={navigator} />
 		    //这里传递了navigator作为props
@@ -31,8 +31,8 @@ class SecondPage extends Component {
 		    //这里传递了navigator作为props
 	    if(navigator) {
 	        navigator.push({
-            name: 'ThirdPage',
-            component: ThirdPage,
+            name: 'AnoPage',
+            component: AnoPage,
         	})
 	    }
 	}
@@ -45,7 +45,7 @@ class SecondPage extends Component {
 				</TouchableOpacity>
 
 				<TouchableOpacity onPress={this._jump.bind(this)}>
-					<Text>jump3!</Text>
+					<Text>jumpUp!</Text>
 				</TouchableOpacity>
 			</View>
 		);

@@ -16,6 +16,7 @@ import TabNavigatorItem from '../../node_modules/react-native-tab-navigator-mast
 import Fragment2 from './SecondPage';
 import Fragment3 from './ThirdPage';
 import Fragment4 from './FourthPage';
+import AnoPage from './AnoPage';
 
 const TAB_NORMAL_1=require('../imgs/tabbar_1.png');
 const TAB_NORMAL_2=require('../imgs/tabbar_2.png');
@@ -26,8 +27,12 @@ const TAB_PRESS_1=require('../imgs/tabbar_1_press.png');
 const TAB_PRESS_2=require('../imgs/tabbar_2_press.png');
 const TAB_PRESS_3=require('../imgs/tabbar_3_press.png');
 const TAB_PRESS_4=require('../imgs/tabbar_4_press.png');
+import AndroidBack from '../widgets/AndroidBack';
 
 class FirstPage extends React.Component {
+  componentDidMount() {
+    AndroidBack.addBackAndroidListener(this.props.navigator); 
+  }
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -43,38 +48,38 @@ class FirstPage extends React.Component {
 			);
 		}
 	}
-    /**
-    * 在此进行底部bar的渲染。
-    **/
-    renderTabView(title,tabName,tabContent,isBadge){
-		var tabNomal;
-		var tabPress;
-		var viewtoshow;
-		switch (tabName) {
-			case 'Home':
-			tabNomal=TAB_NORMAL_1;
-			tabPress=TAB_PRESS_1;
-			viewtoshow = this.pageOne();
-			break;
-			case 'Video':
-			tabNomal=TAB_NORMAL_2;
-			tabPress=TAB_PRESS_2;
-			viewtoshow = this.getSecondPage();
-			break;
-			case 'Follow':
-			tabNomal=TAB_NORMAL_3;
-			tabPress=TAB_PRESS_3;
-			viewtoshow = this.getThirdPage();
-			break;
-			case 'Mine':
-			tabNomal=TAB_NORMAL_4;
-			tabPress=TAB_PRESS_4;
-			viewtoshow = this.getFourthPage();
-			break;
-			default:
-		}
-		return(
-        <TabNavigatorItem
+  /**
+  * 在此进行底部bar的渲染。
+  **/
+  renderTabView(title,tabName,tabContent,isBadge){
+	var tabNomal;
+	var tabPress;
+	var viewtoshow;
+	switch (tabName) {
+		case 'Home':
+		tabNomal=TAB_NORMAL_1;
+		tabPress=TAB_PRESS_1;
+		viewtoshow = this.pageOne();
+		break;
+		case 'Video':
+		tabNomal=TAB_NORMAL_2;
+		tabPress=TAB_PRESS_2;
+		viewtoshow = this.getSecondPage();
+		break;
+		case 'Follow':
+		tabNomal=TAB_NORMAL_3;
+		tabPress=TAB_PRESS_3;
+		viewtoshow = this.getThirdPage();
+		break;
+		case 'Mine':
+		tabNomal=TAB_NORMAL_4;
+		tabPress=TAB_PRESS_4;
+		viewtoshow = this.getFourthPage();
+		break;
+		default:
+	}
+	return(
+    <TabNavigatorItem
 			title={title}
 			renderIcon={()=><Image style={styles.tabIcon} source={tabNomal}/>}
 			renderSelectedIcon={()=><Image style={styles.tabIcon} source={tabPress}/>}
@@ -83,31 +88,29 @@ class FirstPage extends React.Component {
 			onPress={()=>this.onPress(tabName)}
 			renderBadge={()=>isBadge?
 				<View style={styles.badgeView}>
-				<Text style={styles.badgeText}>15</Text>
-				</View>:null}
+				<Text style={styles.badgeText}>11</Text>
+				</View>:null
+			}
 		>
-	        <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-	        	{viewtoshow}
-	        </View>
-        </TabNavigatorItem>
-      );
-    }
-    /**
-     * 这里原来是用来跳转到SecondPage的。
-     * 改用第三方组件之后，就不再需要这个了。
-     * @return {[type]} [description]
-     */
+      <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+      	{viewtoshow}
+      </View>
+    </TabNavigatorItem>
+  );}
 	_pressButton() {
 		const { navigator } = this.props;
-		    //为什么这里可以取得 props.navigator?请看上文:
-		    //<Component {...route.params} navigator={navigator} />
-		    //这里传递了navigator作为props
-		    if(navigator) {
-		        navigator.push({
-	            name: 'SecondPage',
-	            component: SecondPage,
-	        })
-	    }
+    if(navigator) {
+        navigator.push({
+          name: 'AnoPage',
+          component: AnoPage,
+      })
+    }
+	}
+	_getNav() {
+		const { navigator } = this.props;
+    if(navigator) {
+    	return navigator;
+    }
 	}
 	tabBarView(){
     	return (
@@ -124,13 +127,15 @@ class FirstPage extends React.Component {
 	pageOne() {
 		return (
 		<View>
-			<Text>pageOne!</Text>
+			<TouchableOpacity  onPress={this._pressButton.bind(this)}>
+				<Text>pageOne!</Text>
+			</TouchableOpacity>
 		</View>
 		);
 	}
 	getSecondPage(){
 		return(
-			<Fragment2></Fragment2>
+			<Fragment2 navigator={ this._getNav() }></Fragment2>
 			);
 	}
 	getThirdPage(){
@@ -146,13 +151,6 @@ class FirstPage extends React.Component {
 	render() {
 		const tabBarView = this.tabBarView();
 		return (
-			// <View >
-			// 	<Text>FirstPage</Text>
-			// 	<Text>~~~~~~~~~~!!!</Text>
-			// 	<TouchableOpacity style={styles.styleOne} onPress={this._pressButton.bind(this)}>
-			// 	<Text>跳转SecondPage</Text>
-			// 	</TouchableOpacity>
-			// </View>
 			<View style={styles.container}>
 				{tabBarView}
 			</View>
