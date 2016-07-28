@@ -35,11 +35,11 @@ class FourthPage extends Component{
     setTimeout(()=>{
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(
-        	['row 1', 'row 2','row 1', 'row 2','row 1', 
-        	'row 2','row 1', 'row 2','row 1', 'row 2',
-        	'row 1', 'row 2','row 1', 'row 2','row 1', 
-        	'row 2','row 1', 'row 2','row 1', 'row 2',
-        	'row 1', 'row 2','row 3'])
+        	['row 1', 'row 2','row 3', 'row 4','row 5',
+        	'row 6','row 7', 'row 8','row 9', 'row 10',
+        	'row 11', 'row 12','row 13', 'row 14','row 15',
+        	'row 16','row 17', 'row 18','row 19', 'row 20',
+        	'row 21', 'row 22','row 23'])
       });
     },1000);
   }
@@ -47,7 +47,7 @@ class FourthPage extends Component{
 	    return (
 			<ListView
 				dataSource={this.state.dataSource}
-				renderRow={(rowData,rowHasChanged) => 
+				renderRow={(rowData,rowHasChanged) =>
 					<View style={ style.cell }>
 						<Text>{rowData +':-- '+ rowHasChanged}</Text>
 						<Image style={style.logo}
@@ -57,12 +57,6 @@ class FourthPage extends Component{
 			</ListView>
 	    );
 	}
-	_onRefresh() {
-		this.setState({isRefreshing: true});
-		setTimeout(() => {
-			ToastAndroid.show('This is a toast with short duration', ToastAndroid.SHORT)
-		}, 5000);
-	}
 }
 
 const style = StyleSheet.create({
@@ -70,8 +64,8 @@ const style = StyleSheet.create({
     flex: 1,
 	},
 	cell: {
-		flexDirection: 'row', 
-		width: SCREEN_WIDTH, 
+		flexDirection: 'row',
+		width: SCREEN_WIDTH,
 		padding: 20,
 	},
 	logo: {

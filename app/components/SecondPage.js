@@ -7,7 +7,7 @@ import {
 	Navigator,
 	TouchableOpacity
 } from 'react-native';
-import AnoPage from './AnoPage';
+import AnoPage from './views/AnoPage';
 
 class SecondPage extends Component {
 	constructor(props) {

@@ -17,6 +17,7 @@ class ThirdPage extends Component {
 		super(props);
 		this.state = {};
 	}
+
 	_back() {
 		let { navigator } = this.props;
 		if (navigator) {
