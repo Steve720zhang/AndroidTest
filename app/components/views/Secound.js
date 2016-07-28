@@ -13,8 +13,6 @@ import {
 
 const Dimensions = require('Dimensions');
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const SCREEN_HEIGHT = Dimensions.get('window').height;
-
 
 class TwoPage extends Component {
 	constructor(props) {
@@ -33,7 +31,7 @@ class TwoPage extends Component {
 				<View></View>
 				<View style={styles.bottomStyle}>
 					<View style={styles.bottomUp}>
-						<Text>{SCREEN_WIDTH}{SCREEN_HEIGHT}
+						<Text>{SCREEN_WIDTH}
 						</Text>
 					</View>
 					<View style={styles.bottomDown}></View>
