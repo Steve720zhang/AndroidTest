@@ -13,9 +13,9 @@ import {
 
 import TabNavigator from '../../node_modules/react-native-tab-navigator-master/TabNavigator';
 import TabNavigatorItem from '../../node_modules/react-native-tab-navigator-master/TabNavigatorItem';
-import Fragment2 from './SecondPage';
-import Fragment3 from './ThirdPage';
-import Fragment4 from './FourthPage';
+import Fragment2 from './FragmentTwo';
+import Fragment3 from './FragmentThree';
+import Fragment4 from './FragmentFour';
 import TwoPage from './views/Secound';
 
 const TAB_NORMAL_1 = require('../imgs/tabbar_1.png');

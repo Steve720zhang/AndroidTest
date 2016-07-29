@@ -10,14 +10,12 @@ import {
 } from 'react-native';
 const Dimensions = require('Dimensions');
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class ThirdPage extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
 	}
-
 	_back() {
 		let { navigator } = this.props;
 		if (navigator) {

@@ -26,12 +26,10 @@ class FourthPage extends Component{
     });
     this.state = {
       dataSource: ds.cloneWithRows(['row 1', 'row 2']),
-    }
+    };
   }
 
   componentDidMount(){
-    let that = this;
-
     setTimeout(()=>{
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(

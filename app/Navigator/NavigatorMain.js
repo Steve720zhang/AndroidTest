@@ -11,7 +11,7 @@ import {
     TouchableOpacity,
     Navigator
 } from 'react-native';
-import FirstPage from '../components/FirstPage';
+import FirstPage from '../components/MainFragment';
 
 class SampleComponent extends React.Component {
   render() {
