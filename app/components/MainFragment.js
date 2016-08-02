@@ -155,7 +155,7 @@ class FirstPage extends React.Component {
 
 		getThirdPage() {
 				return (
-						<Fragment3></Fragment3>
+						<Fragment3 navigator={ this._getNav() }></Fragment3>
 				);
 		}
 
