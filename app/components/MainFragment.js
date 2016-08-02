@@ -10,9 +10,9 @@ import {
 		TouchableOpacity,
 		Navigator
 } from 'react-native';
-
-import TabNavigator from '../../node_modules/react-native-tab-navigator-master/TabNavigator';
-import TabNavigatorItem from '../../node_modules/react-native-tab-navigator-master/TabNavigatorItem';
+import TabNavigator from 'react-native-tab-navigator';
+// import TabNavigator from '../../node_modules/react-native-tab-navigator-master/TabNavigator';
+// import TabNavigatorItem from '../../node_modules/react-native-tab-navigator-master/TabNavigatorItem';
 import Fragment2 from './FragmentTwo';
 import Fragment3 from './FragmentThree';
 import Fragment4 from './FragmentFour';
@@ -87,7 +87,7 @@ class FirstPage extends React.Component {
 						default:
 				}
 				return (
-						<TabNavigatorItem
+						<TabNavigator.Item
 								title={title}
 								renderIcon={()=><Image style={styles.tabIcon} source={tabNomal}/>}
 								renderSelectedIcon={()=><Image style={styles.tabIcon} source={tabPress}/>}
@@ -103,7 +103,7 @@ class FirstPage extends React.Component {
 								<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 										{viewtoshow}
 								</View>
-						</TabNavigatorItem>
+						</TabNavigator.Item>
 				);
 		}
 
