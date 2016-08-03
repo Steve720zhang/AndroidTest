@@ -4,39 +4,30 @@ import React, {Component} from 'react';
 import {
 	View,
 	Text,
-	TextInput,
-	ScrollView,
 	StyleSheet,
 	ToastAndroid,
+	ScrollView,
 	TouchableOpacity
 } from 'react-native';
 const Dimensions = require('Dimensions');
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 const values = require('../../widgets/values');
-
-class AddNote extends Component {
+import AddNote from './AddNote';
+class NoteDetail extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			id: null,
-			load: false,
-			detail: {},
+			detail: {}
 		};
 	}
 
 	componentDidMount() {
 		this.setState({
 			id: this.state.id = this.props.id,
-			load: this.state.load = this.props.load,
-			detail: {
-				title: this.state.detail.title = '',
-				content: this.state.detail.content = ''
-			}
 		});
-		if (this.state.load) {
-			this._loadDetail();
-		}
+		this._loadDetail();
 	}
 
 	_loadDetail() {
@@ -55,6 +46,20 @@ class AddNote extends Component {
 			.done();
 	}
 
+	_toDetail() {
+		const {navigator} = this.props;
+		if (navigator) {
+			navigator.replace({
+				name: 'AddNote',
+				component: AddNote,
+				params:{
+					load: true,
+					id: this.state.id
+				}
+			})
+		}
+	}
+
 	_back() {
 		const {navigator} = this.props;
 		if (navigator) {
@@ -64,41 +69,48 @@ class AddNote extends Component {
 
 	render() {
 		return (
-			<View style={{flex: 1, flexDirection: 'column'}}>
+			<View style={{flex: 1}}>
 				<View style={style.topTitleBar}>
 					<View style={style.flexContentLeft}>
 						<TouchableOpacity style={style.topButtonContainer} onPress={this._back.bind(this)}>
 							<Text style={style.topButtonAddNew}>后退</Text>
 						</TouchableOpacity>
 					</View>
-					<Text style={style.topTitleText}>{this.state.load ? '编辑笔记' : '新建笔记'}</Text>
+					<Text style={style.topTitleText}>笔记详情</Text>
 					<View style={style.flexContentRight}>
-						<TouchableOpacity style={style.topButtonContainer} onPress={this.state.load? () => this._save(): () => this._add()}>
-							<Text style={style.topButtonAddNew}>保存</Text>
+						<TouchableOpacity style={style.topButtonContainer} onPress={this._toDetail.bind(this)}>
+							<Text style={style.topButtonAddNew}>编辑</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
-				<View style={{flex: 1, flexDirection: 'column', paddingBottom: 10,}}>
-					<TextInput
-						placeholderTextColor={values.TITLE_COLOR} underlineColorAndroid={'transparent'} autoCapitalize={'none'}
-						style={{fontSize: 20, flex: 1, textAlignVertical: 'top', color: values.TITLE_COLOR_ANOTHER_TWO,}}
-						multiline={true} placeholder='请编辑标题' value={this.state.detail.title}/>
-					<View style={{height: 1, backgroundColor: values.TITLE_COLOR_ANOTHER_TWO,}}/>
-					<TextInput
-						placeholderTextColor={values.TITLE_COLOR} underlineColorAndroid={'transparent'}
-						autoCapitalize={'none'}
-						style={{fontSize: 14, flex: 8, textAlignVertical: 'top', color: values.TITLE_COLOR_ANOTHER_TWO,}}
-						multiline={true} placeholder='请编辑正文内容' value={this.state.detail.content}/>
+				<View style={style.scrollStyle}>
+					<ScrollView>
+						<View style={{
+							flexWrap: 'wrap',
+							marginBottom: 10,
+							backgroundColor: values.TITLE_COLOR_ANOTHER_TWO,
+							padding: 15,
+						}}>
+							<Text style={{
+								fontSize: 20,
+								color: values.TITLE_TEXT_COLOR,
+							}}>标题：《{ this.state.detail.title }》</Text>
+							<Text style={{
+								fontSize: 14,
+								lineHeight: 20,
+								marginTop: 3,
+								color: values.TITLE_TEXT_COLOR,
+								alignSelf: 'flex-end',
+							}}>最近操作时间：{ this.state.detail.date }</Text>
+						</View>
+						<View style={{flex: 1, paddingLeft: 15, paddingRight: 15,}}>
+							<Text style={style.mainContent}>{ this.state.detail.content }</Text>
+						</View>
+					</ScrollView>
 				</View>
 			</View>
 		);
 	}
-
-	_add() {
-		ToastAndroid.show('sav: '+this.state.detail.title, ToastAndroid.SHORT)
-	}
-
-	_save() {}
 }
 
 const style = StyleSheet.create({
@@ -135,6 +147,15 @@ const style = StyleSheet.create({
 		textAlign: 'right',
 		color: values.TITLE_SIDE_BUTTON,
 	},
+	scrollStyle: {
+		flex: 1,
+		flexDirection: 'column',
+	},
+	mainContent: {
+		fontSize: 15,
+		lineHeight: 20,
+		color: values.TITLE_COLOR_ANOTHER,
+	}
 });
 
-export default AddNote;
+export default NoteDetail;

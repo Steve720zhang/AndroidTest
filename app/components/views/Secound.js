@@ -11,6 +11,7 @@ import {
 	ListView,
 	ToastAndroid
 } from 'react-native';
+
 const Dimensions = require('Dimensions');
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -52,7 +53,7 @@ class TwoPage extends Component {
 				"opta_id": "6386",
 				"sl_id": "5065",
 				"logo": null
-			},    {
+			}, {
 				"league_id": "2015",
 				"team_id": "7697",
 				"team_cn": "上海上港!!!!",
@@ -102,8 +103,10 @@ class TwoPage extends Component {
 					<View style={styles.bottomUp}>
 						<Text>屏幕宽度{SCREEN_WIDTH}</Text>
 						<ScrollView horizontal={true}>
-							<TouchableOpacity onPress={this.reqHttp.bind(this)} style={styles.buttonContainer}><Text style={styles.button}>加载列表</Text></TouchableOpacity>
-							<TouchableOpacity onPress={this.clearList.bind(this)} style={styles.buttonContainer}><Text style={styles.button}>clearList</Text></TouchableOpacity>
+							<TouchableOpacity onPress={this.reqHttp.bind(this)} style={styles.buttonContainer}><Text
+								style={styles.button}>加载列表</Text></TouchableOpacity>
+							<TouchableOpacity onPress={this.clearList.bind(this)} style={styles.buttonContainer}><Text
+								style={styles.button}>clearList</Text></TouchableOpacity>
 							<TouchableOpacity style={styles.buttonContainer}><Text style={styles.button}>3</Text></TouchableOpacity>
 							<TouchableOpacity style={styles.buttonContainer}><Text style={styles.button}>4</Text></TouchableOpacity>
 						</ScrollView>
@@ -118,7 +121,7 @@ class TwoPage extends Component {
 							renderFooter={() =>
 								<View><Text>Footer</Text></View>
 							}
-							renderRow={(rowData,rowHasChanged) =>
+							renderRow={(rowData, rowHasChanged) =>
 								<View style={styles.buttons}>
 									<Text>名称：{rowData.team_cn}</Text>
 									<Text>排名：{rowData.team_order}</Text>
@@ -131,29 +134,31 @@ class TwoPage extends Component {
 			</View>
 		);
 	}
+
 	clearList() {
 		this.setState({
 			listData: this.state.listData = [],
 			dataSource: this.state.dataSource.cloneWithRows(this.state.listData),
 		});
 	}
+
 	reqHttp() {
 		return fetch(
 			'http://platform.sina.com.cn/sports_all/client_api?app_key=3571367214&_sport_t_=football&_sport_s_=opta&_sport_a_=teamOrder&type=213&season=2015&format=json',
 			{method: 'GET'})
-		.then((response) => response.json())
-		.then((responseJson) => {
-				ToastAndroid.show('response:'+ responseJson.result.data.length, ToastAndroid.SHORT);
+			.then((response) => response.json())
+			.then((responseJson) => {
+				ToastAndroid.show('response:' + responseJson.result.data.length, ToastAndroid.SHORT);
 				// this._onDataArrived([4,5,6,6,7,7,6,54,34,3,3,3,10])
 				this.setState({
 					listData: this.state.listData = this.state.listData.concat(responseJson.result.data),
 					dataSource: this.state.dataSource.cloneWithRows(this.state.listData),
 				})
-		})
-		.catch((err) => {
-			ToastAndroid.show('res-err!'+err.toString(), ToastAndroid.SHORT)
-		})
-		.done();
+			})
+			.catch((err) => {
+				ToastAndroid.show('res-err!' + err.toString(), ToastAndroid.SHORT)
+			})
+			.done();
 	}
 }
 
@@ -213,9 +218,7 @@ const styles = StyleSheet.create({
 	buttons: {
 		margin: 10,
 	},
-	headFoot: {
-
-	},
+	headFoot: {},
 });
 
 export default TwoPage;

@@ -5,18 +5,71 @@ import {
 	Navigator,
 	View,
 	ListView,
+	ToastAndroid,
 	Text,
 	StyleSheet,
 	TouchableOpacity
 } from 'react-native';
 import AddNote from './views/AddNote';
+import NoteDetail from './views/NoteDetail';
+
+var pageSize = 10;
+var pageNow = 1;
+
+const values = require('../widgets/values');
 
 const Dimensions = require('Dimensions');
 const SCREEN_WIDTH = Dimensions.get('window').width;
 class ThirdPage extends Component {
+
 	constructor(props) {
+		var listData = [];
+
 		super(props);
-		this.state = {};
+		let ds = new ListView.DataSource({
+			rowHasChanged: (r1, r2) => r1 !== r2
+		});
+		this.state = {
+			listData: listData = [],
+			dataSource: ds.cloneWithRows(listData),
+		};
+	}
+	componentDidMount() {
+		this._loadList();
+	}
+	clearList() {
+		this.setState({
+			listData: this.state.listData = [],
+			dataSource: this.state.dataSource.cloneWithRows(this.state.listData),
+		});
+	}
+
+	_loadList() {
+		return fetch(
+			'http://192.168.1.57:9017/api/list?pagesize=' + pageSize + '&page=' + pageNow,
+			{method: 'GET'})
+			.then((response) => response.json())
+			.then((responseJson) => {
+				this.setState({
+					listData: this.state.listData = this.state.listData.concat(responseJson.list),
+					dataSource: this.state.dataSource.cloneWithRows(this.state.listData),
+				})
+			})
+			.catch((err) => {
+				ToastAndroid.show('res-err!' + err.toString(), ToastAndroid.SHORT)
+			})
+			.done();
+	}
+
+	_goDetail(theId) {
+		const {navigator} = this.props;
+		if (navigator) {
+			navigator.push({
+				name: 'NoteDetail',
+				component: NoteDetail,
+				params:{id: theId},
+			})
+		}
 	}
 
 	render() {
@@ -31,15 +84,29 @@ class ThirdPage extends Component {
 						</TouchableOpacity>
 					</View>
 				</View>
+				<View style={{flex: 1}}>
+					<ListView
+						enableEmptySections={true}
+						dataSource={this.state.dataSource}
+						renderRow={(rowData, rowHasChanged) =>
+							<TouchableOpacity onPress={() => this._goDetail(rowData._id)}>
+								<View style={ style.cell }>
+									<View style={style.cellTop}>
+										<Text style={style.cellTitle} numberOfLines={1}>{rowData.body.title}</Text>
+										<Text style={style.cellTime}>{rowData.body.date}</Text>
+									</View>
+									<Text style={style.cellContent} numberOfLines={2}>{rowData.body.content}</Text>
+								</View>
+							</TouchableOpacity>
+						}></ListView>
+				</View>
 			</View>
 		);
 	}
+
 	_jump() {
-		const { navigator } = this.props;
-		//为什么这里可以取得 props.navigator?请看上文:
-		//<Component {...route.params} navigator={navigator} />
-		//这里传递了navigator作为props
-		if(navigator) {
+		const {navigator} = this.props;
+		if (navigator) {
 			navigator.push({
 				name: 'AddNote',
 				component: AddNote,
@@ -52,7 +119,7 @@ const style = StyleSheet.create({
 	topTitleBar: {
 		width: SCREEN_WIDTH,
 		height: 50,
-		backgroundColor: '#ffaa99',
+		backgroundColor: values.TITLE_COLOR,
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
@@ -64,7 +131,7 @@ const style = StyleSheet.create({
 	},
 	topTitleText: {
 		fontSize: 25,
-		color: '#666666',
+		color: values.TITLE_TEXT_COLOR,
 	},
 	topButtonContainer: {
 		width: 60,
@@ -75,7 +142,31 @@ const style = StyleSheet.create({
 	topButtonAddNew: {
 		fontSize: 18,
 		textAlign: 'right',
-		color: '#65ddc5',
+		color: values.TITLE_SIDE_BUTTON,
+	},
+	cell: {
+		padding: 10,
+		flexDirection: 'column',
+		borderBottomWidth: 1,
+		borderBottomColor: values.TITLE_COLOR_ANOTHER,
+	},
+	cellTop: {
+		flexDirection: 'row',
+		marginBottom: 10,
+		alignItems: 'center',
+	},
+	cellTitle: {
+		flex: 1,
+		fontSize: 18,
+		color: '#333333',
+	},
+	cellTime: {
+		fontSize: 14,
+		color: '#888888',
+	},
+	cellContent: {
+		fontSize: 14,
+		color: '#888888',
 	}
 });
 

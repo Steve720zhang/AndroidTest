@@ -11,8 +11,6 @@ import {
 		Navigator
 } from 'react-native';
 import TabNavigator from 'react-native-tab-navigator';
-// import TabNavigator from '../../node_modules/react-native-tab-navigator-master/TabNavigator';
-// import TabNavigatorItem from '../../node_modules/react-native-tab-navigator-master/TabNavigatorItem';
 import Fragment2 from './FragmentTwo';
 import Fragment3 from './FragmentThree';
 import Fragment4 from './FragmentFour';
