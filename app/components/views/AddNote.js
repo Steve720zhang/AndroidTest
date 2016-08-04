@@ -10,6 +10,7 @@ import {
 	ToastAndroid,
 	TouchableOpacity
 } from 'react-native';
+
 const Dimensions = require('Dimensions');
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -21,7 +22,7 @@ class AddNote extends Component {
 		this.state = {
 			id: null,
 			load: false,
-			detail: {},
+			detail: {}
 		};
 	}
 
@@ -29,10 +30,6 @@ class AddNote extends Component {
 		this.setState({
 			id: this.state.id = this.props.id,
 			load: this.state.load = this.props.load,
-			detail: {
-				title: this.state.detail.title = '',
-				content: this.state.detail.content = ''
-			}
 		});
 		if (this.state.load) {
 			this._loadDetail();
@@ -46,7 +43,10 @@ class AddNote extends Component {
 			.then((response) => response.json())
 			.then((responseJson) => {
 				this.setState({
-					detail: this.state.detail = responseJson.body
+					detail: {
+						title: this.state.title = responseJson.body.title,
+						content: this.state.content = responseJson.body.content,
+					}
 				})
 			})
 			.catch((err) => {
@@ -73,32 +73,103 @@ class AddNote extends Component {
 					</View>
 					<Text style={style.topTitleText}>{this.state.load ? '编辑笔记' : '新建笔记'}</Text>
 					<View style={style.flexContentRight}>
-						<TouchableOpacity style={style.topButtonContainer} onPress={this.state.load? () => this._save(): () => this._add()}>
+						<TouchableOpacity style={style.topButtonContainer}
+						                  onPress={this.state.load ? () => this._save() : () => this._add()}>
 							<Text style={style.topButtonAddNew}>保存</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
 				<View style={{flex: 1, flexDirection: 'column', paddingBottom: 10,}}>
-					<TextInput
-						placeholderTextColor={values.TITLE_COLOR} underlineColorAndroid={'transparent'} autoCapitalize={'none'}
-						style={{fontSize: 20, flex: 1, textAlignVertical: 'top', color: values.TITLE_COLOR_ANOTHER_TWO,}}
-						multiline={true} placeholder='请编辑标题' value={this.state.detail.title}/>
+					<TextInput editable={true} autoFocus={true}
+					           placeholderTextColor={values.TITLE_COLOR} underlineColorAndroid={'transparent'}
+					           autoCapitalize={'none'}
+					           style={{fontSize: 20, flex: 1, textAlignVertical: 'top', color: values.TITLE_COLOR_ANOTHER_TWO,}}
+					           multiline={true} placeholder='请编辑标题' value={this.state.title} onChangeText={(text) => {
+						var titleTXT = text;
+						this.setState({
+							title: this.state.title = titleTXT,
+						})
+					}}/>
 					<View style={{height: 1, backgroundColor: values.TITLE_COLOR_ANOTHER_TWO,}}/>
-					<TextInput
-						placeholderTextColor={values.TITLE_COLOR} underlineColorAndroid={'transparent'}
-						autoCapitalize={'none'}
-						style={{fontSize: 14, flex: 8, textAlignVertical: 'top', color: values.TITLE_COLOR_ANOTHER_TWO,}}
-						multiline={true} placeholder='请编辑正文内容' value={this.state.detail.content}/>
+					<TextInput editable={true}
+					           placeholderTextColor={values.TITLE_COLOR} underlineColorAndroid={'transparent'}
+					           autoCapitalize={'none'}
+					           style={{fontSize: 14, flex: 8, textAlignVertical: 'top', color: values.TITLE_COLOR_ANOTHER_TWO,}}
+					           multiline={true} placeholder='请编辑正文内容' value={this.state.content} onChangeText={(text) => {
+						var contentTXT = text;
+						this.setState({
+							content: this.state.content = contentTXT,
+						})
+					}}/>
 				</View>
 			</View>
 		);
 	}
 
 	_add() {
-		ToastAndroid.show('sav: '+this.state.detail.title, ToastAndroid.SHORT)
+		if (!this.state.title || !(this.state.title.toString().length > 0)) {
+			ToastAndroid.show('请输入标题', ToastAndroid.SHORT)
+			return;
+		}
+		if (!this.state.content || !(this.state.content.toString().length > 0)) {
+			ToastAndroid.show('请输入内容', ToastAndroid.SHORT)
+			return;
+		}
+		ToastAndroid.show('title: ' + this.state.title + '\ncontent:' + this.state.content, ToastAndroid.SHORT)
+		return fetch('http://192.168.1.57:9017/api/insert/',
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: 'title=' + this.state.title + '&content=' + this.state.content
+			})
+			.then((response) => response.json())
+			.then((responseJson) => {
+				if (responseJson.rr === 1) {
+					ToastAndroid.show('添加成功！r:' + responseJson.rr, ToastAndroid.SHORT)
+					return this._back();
+				} else {
+					ToastAndroid.show('添加失败！', ToastAndroid.SHORT)
+				}
+			})
+			.catch((err) => {
+				ToastAndroid.show('res-err!' + err.toString(), ToastAndroid.SHORT)
+			})
+			.done();
 	}
 
-	_save() {}
+	_save() {
+		if (!this.state.title || !(this.state.title.toString().length > 0)) {
+			ToastAndroid.show('标题不能为空', ToastAndroid.SHORT)
+			return;
+		}
+		if (!this.state.content || !(this.state.content.toString().length > 0)) {
+			ToastAndroid.show('内容不能为空', ToastAndroid.SHORT)
+			return;
+		}
+		return fetch('http://192.168.1.57:9017/api/change/?id=' + this.state.id,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded'
+				},
+				body: 'title=' + this.state.title + '&content=' + this.state.content
+			})
+			.then((response) => response.json())
+			.then((responseJson) => {
+				if (responseJson.rr === 1) {
+					ToastAndroid.show('编辑成功!', ToastAndroid.SHORT)
+					return this._back();
+				} else {
+					ToastAndroid.show('编辑失败！', ToastAndroid.SHORT)
+				}
+			})
+			.catch((err) => {
+				ToastAndroid.show('res-err!' + err.toString(), ToastAndroid.SHORT)
+			})
+			.done();
+	}
 }
 
 const style = StyleSheet.create({

@@ -7,14 +7,17 @@ import {
 	ListView,
 	ToastAndroid,
 	Text,
+	RefreshControl,
 	StyleSheet,
 	TouchableOpacity
 } from 'react-native';
 import AddNote from './views/AddNote';
 import NoteDetail from './views/NoteDetail';
 
+
 var pageSize = 10;
 var pageNow = 1;
+var canLoad = true;
 
 const values = require('../widgets/values');
 
@@ -34,9 +37,11 @@ class ThirdPage extends Component {
 			dataSource: ds.cloneWithRows(listData),
 		};
 	}
+
 	componentDidMount() {
-		this._loadList();
+		this._loadList(true);
 	}
+
 	clearList() {
 		this.setState({
 			listData: this.state.listData = [],
@@ -44,15 +49,16 @@ class ThirdPage extends Component {
 		});
 	}
 
-	_loadList() {
+	_loadList(clear) {
 		return fetch(
 			'http://192.168.1.57:9017/api/list?pagesize=' + pageSize + '&page=' + pageNow,
 			{method: 'GET'})
 			.then((response) => response.json())
 			.then((responseJson) => {
 				this.setState({
-					listData: this.state.listData = this.state.listData.concat(responseJson.list),
+					listData: clear?this.state.listData = responseJson.list:this.state.listData = this.state.listData.concat(responseJson.list),
 					dataSource: this.state.dataSource.cloneWithRows(this.state.listData),
+					canLoad: canLoad = (responseJson.list.length < 10)? false:true,
 				})
 			})
 			.catch((err) => {
@@ -67,9 +73,16 @@ class ThirdPage extends Component {
 			navigator.push({
 				name: 'NoteDetail',
 				component: NoteDetail,
-				params:{id: theId},
+				params: {id: theId},
 			})
 		}
+	}
+
+	_onRefreshed() {
+		canLoad = true
+		pageNow = 1
+		this._loadList(true);
+		ToastAndroid.show('onRefreshed\npageNow:'+pageNow,ToastAndroid.SHORT)
 	}
 
 	render() {
@@ -86,6 +99,16 @@ class ThirdPage extends Component {
 				</View>
 				<View style={{flex: 1}}>
 					<ListView
+						onEndReachedThreshold={1}
+						onEndReached={() => this._loadMore()}
+						refreshControl={
+							<RefreshControl
+								refreshing={this.state.refreshing = false}
+								onRefresh={this._onRefreshed.bind(this)}
+								colors={['#691A99']}
+								progressBackgroundColor="#fff"
+							/>
+						}
 						enableEmptySections={true}
 						dataSource={this.state.dataSource}
 						renderRow={(rowData, rowHasChanged) =>
@@ -112,6 +135,17 @@ class ThirdPage extends Component {
 				component: AddNote,
 			})
 		}
+	}
+
+	_loadMore() {
+		if (!canLoad) {
+			ToastAndroid.show('没有更多了',ToastAndroid.SHORT)
+			return;
+		}
+		if (this.state.listData.length === 0) return;
+		pageNow +=1;
+		ToastAndroid.show('loadMore\npageNow:'+pageNow,ToastAndroid.SHORT)
+		this._loadList(false)
 	}
 }
 
