@@ -1,0 +1,2 @@
+ReactNative的Http请求指南：
+http://blog.csdn.net/u010046908/article/details/50916511
