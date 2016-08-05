@@ -6,6 +6,7 @@ import {
 	View,
 	ListView,
 	ToastAndroid,
+	ScrollView,
 	Text,
 	RefreshControl,
 	StyleSheet,
@@ -56,9 +57,9 @@ class ThirdPage extends Component {
 			.then((response) => response.json())
 			.then((responseJson) => {
 				this.setState({
-					listData: clear?this.state.listData = responseJson.list:this.state.listData = this.state.listData.concat(responseJson.list),
+					listData: clear ? this.state.listData = responseJson.list : this.state.listData = this.state.listData.concat(responseJson.list),
 					dataSource: this.state.dataSource.cloneWithRows(this.state.listData),
-					canLoad: canLoad = (responseJson.list.length < 10)? false:true,
+					canLoad: canLoad = (responseJson.list.length < 10) ? false : true,
 				})
 			})
 			.catch((err) => {
@@ -82,7 +83,7 @@ class ThirdPage extends Component {
 		canLoad = true
 		pageNow = 1
 		this._loadList(true);
-		ToastAndroid.show('onRefreshed\npageNow:'+pageNow,ToastAndroid.SHORT)
+		ToastAndroid.show('onRefreshed\npageNow:' + pageNow, ToastAndroid.SHORT)
 	}
 
 	render() {
@@ -112,15 +113,26 @@ class ThirdPage extends Component {
 						enableEmptySections={true}
 						dataSource={this.state.dataSource}
 						renderRow={(rowData, rowHasChanged) =>
-							<TouchableOpacity onPress={() => this._goDetail(rowData._id)}>
-								<View style={ style.cell }>
-									<View style={style.cellTop}>
-										<Text style={style.cellTitle} numberOfLines={1}>{rowData.body.title}</Text>
-										<Text style={style.cellTime}>{rowData.body.date}</Text>
-									</View>
-									<Text style={style.cellContent} numberOfLines={2}>{rowData.body.content}</Text>
+							<ScrollView horizontal={true} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}
+							            scrollsToTop={true}
+							            alwaysBounceHorizontal={true}>
+								<View style={{flexDirection: 'row', width: (SCREEN_WIDTH + 50)}}>
+									<TouchableOpacity onPress={() => this._goDetail(rowData._id)}>
+										<View style={ style.cell }>
+											<View style={style.cellTop}>
+												<Text style={style.cellTitle} numberOfLines={1}>{rowData.body.title}</Text>
+												<Text style={style.cellTime}>{rowData.body.date}</Text>
+											</View>
+											<Text style={style.cellContent} numberOfLines={1}>{rowData.body.content}</Text>
+										</View>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => this._Detele(rowData._id)}>
+										<View style={{backgroundColor: '#ff3333', width: 50, flex: 1,}}>
+											<Text style={{color: '#fcfcfc'}}>删除</Text>
+										</View>
+									</TouchableOpacity>
 								</View>
-							</TouchableOpacity>
+							</ScrollView>
 						}></ListView>
 				</View>
 			</View>
@@ -139,13 +151,33 @@ class ThirdPage extends Component {
 
 	_loadMore() {
 		if (!canLoad) {
-			ToastAndroid.show('没有更多了',ToastAndroid.SHORT)
+			ToastAndroid.show('没有更多了', ToastAndroid.SHORT)
 			return;
 		}
 		if (this.state.listData.length === 0) return;
-		pageNow +=1;
-		ToastAndroid.show('loadMore\npageNow:'+pageNow,ToastAndroid.SHORT)
+		pageNow += 1;
+		ToastAndroid.show('loadMore\npageNow:' + pageNow, ToastAndroid.SHORT)
 		this._loadList(false)
+	}
+
+	_Detele(id) {//http://localhost:9017/api/delete/?id=57a054a3621d322200b735aa
+		pageNow = 1;
+		return fetch(
+			'http://192.168.1.57:9017/api/delete?id=' + id,
+			{method: 'GET'})
+			.then((response) => response.json())
+			.then((responseJson) => {
+				if (responseJson.rr === 1) {
+					ToastAndroid.show('删除成功', ToastAndroid.SHORT)
+					this._loadList(true);
+				} else {
+					ToastAndroid.show('操作失败', ToastAndroid.SHORT)
+				}
+			})
+			.catch((err) => {
+				ToastAndroid.show('res-err!' + err.toString(), ToastAndroid.SHORT)
+			})
+			.done();
 	}
 }
 
@@ -181,6 +213,7 @@ const style = StyleSheet.create({
 	cell: {
 		padding: 10,
 		flexDirection: 'column',
+		width: SCREEN_WIDTH,
 		borderBottomWidth: 1,
 		borderBottomColor: values.TITLE_COLOR_ANOTHER,
 	},
