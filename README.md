@@ -17,10 +17,9 @@ cd AndroidTest
 npm i
 </p>
 <p>
-node index.js
-</p><p>(to run a last process<br>npm i -g pm2<br>pm2 start index.js)--replace:(node index.js)</p>
-(mongodb must be running at first)
+react-native start or react-native run-android
+</p>
 <p>
-some advices sees in (sftp://ubuntu@ec2-52-78-111-2.ap-northeast-2.compute.amazonaws.com/home/ubuntu/tips.txt)
+some advices sees in http://reactnative.cn/
 </p>
 </div>
