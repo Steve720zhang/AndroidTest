@@ -20,6 +20,6 @@ npm i
 react-native start or react-native run-android
 </p>
 <p>
-some advices sees in http://reactnative.cn/
+some advices sees in <a href="http://reactnative.cn/">ReactNative中文网</a>
 </p>
 </div>
